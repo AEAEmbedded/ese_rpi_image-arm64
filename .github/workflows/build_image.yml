@@ -1,8 +1,5 @@
 name: ci 
-on: 
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 10 * *'
+on: workflow_dispatch
 permissions:
   contents: write
 jobs:
