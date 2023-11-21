@@ -7,7 +7,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: sudo ./build-docker.sh
+      - run: |
+          mkdir -p test-stage/package-test &&
+          {
+          cat > test-stage/package-test/00-run-chroot.sh <<EOF
+          #!/bin/bash
+          apt-get install -y curl
+          curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+          EOF
+          } &&
+          chmod +x test-stage/package-test/00-run-chroot.sh &&
+          echo "nodejs" > test-stage/package-test/01-packages &&
+          {
+          cat > test-stage/prerun.sh <<EOF
+          #!/bin/bash -e
+          if [ ! -d "\${ROOTFS_DIR}" ]; then
+            copy_previous
+          fi
+          EOF
+          } &&
+          chmod +x test-stage/prerun.sh
+
+      - run: |
+          mkdir -p clean-stage &&
+          {
+          cat > clean-stage/prerun.sh <<EOF
+          #!/bin/bash
+          set -x
+          rm -f ${{ github.workspace }}/pi-gen/stage[45]/EXPORT*
+          EOF
+          } &&
+          chmod +x clean-stage/prerun.sh
+
+      - uses: ./
+        id: build
       - uses: actions/upload-artifact@v3.1.3
         with:
           name: RPI-ESE-${{ steps.date.outputs.date }}
