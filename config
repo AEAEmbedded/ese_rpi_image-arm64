@@ -1,0 +1,10 @@
+IMG_NAME=ese_raspbian
+TARGET_HOSTNAME=ese-raspberrypi
+KEYBOARD_KEYMAP=
+KEYBOARD_LAYOUT="English (US) - English (US, euro on 5)"
+FIRST_USER_NAME=ese_user
+FIRST_USER_PASS=ese_user_password
+DISABLE_FIRST_BOOT_USER_RENAME=1
+WPA_COUNTRY=NL
+ENABLE_SSH=1
+TIMEZONE_DEFAULT=Europe/Amsterdam
